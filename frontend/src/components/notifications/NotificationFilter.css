@@ -1,0 +1,55 @@
+.notification-filter{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+background:#1f2937;
+
+padding:18px 20px;
+
+border-radius:10px;
+
+margin-bottom:25px;
+
+flex-wrap:wrap;
+
+gap:15px;
+
+}
+
+.notification-filter label{
+
+color:white;
+
+font-weight:600;
+
+}
+
+.notification-filter select{
+
+padding:10px 14px;
+
+border-radius:8px;
+
+border:none;
+
+background:#374151;
+
+color:white;
+
+font-size:15px;
+
+cursor:pointer;
+
+min-width:180px;
+
+}
+
+.notification-filter select:focus{
+
+outline:2px solid #3b82f6;
+
+}
