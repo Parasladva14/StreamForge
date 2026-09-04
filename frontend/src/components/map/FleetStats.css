@@ -1,0 +1,59 @@
+.fleet-stats {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(180px, 1fr)
+  );
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.fleet-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 18px;
+
+  background: #1f2937;
+
+  border-radius: 12px;
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.fleet-stat-icon {
+  font-size: 30px;
+}
+
+.fleet-stat-title {
+  margin: 0 0 5px;
+
+  color: #9ca3af;
+
+  font-size: 14px;
+}
+
+.fleet-stat-value {
+  margin: 0;
+
+  color: white;
+
+  font-size: 26px;
+}
+
+.fleet-stat-blue {
+  border-left: 4px solid #3b82f6;
+}
+
+.fleet-stat-green {
+  border-left: 4px solid #10b981;
+}
+
+.fleet-stat-red {
+  border-left: 4px solid #ef4444;
+}
+
+.fleet-stat-orange {
+  border-left: 4px solid #f59e0b;
+}
