@@ -1,0 +1,18 @@
+.fleet-search{
+    margin-bottom:20px;
+}
+
+.fleet-search input{
+    width:100%;
+    padding:12px 15px;
+    border-radius:8px;
+    border:1px solid #374151;
+    background:#1f2937;
+    color:white;
+    font-size:15px;
+    outline:none;
+}
+
+.fleet-search input::placeholder{
+    color:#9ca3af;
+}
