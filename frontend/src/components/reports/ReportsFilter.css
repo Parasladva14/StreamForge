@@ -1,0 +1,128 @@
+/* ===========================
+   Reports Filter Container
+=========================== */
+
+.reports-filter-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+
+  background: #1f2937;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 25px;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* ===========================
+   Filter Group
+=========================== */
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  color: #d1d5db;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* ===========================
+   Inputs & Selects
+=========================== */
+
+.filter-group input,
+.filter-group select {
+  width: 100%;
+  padding: 12px 14px;
+
+  background: #111827;
+  color: #ffffff;
+
+  border: 1px solid #374151;
+  border-radius: 8px;
+
+  font-size: 14px;
+  outline: none;
+
+  transition: all 0.3s ease;
+}
+
+.filter-group input::placeholder {
+  color: #9ca3af;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* ===========================
+   Date Input
+=========================== */
+
+.filter-group input[type="date"] {
+  color-scheme: dark;
+}
+
+/* ===========================
+   Button Section
+=========================== */
+
+.button-group {
+  display: flex;
+  align-items: flex-end;
+}
+
+.clear-btn {
+  width: 100%;
+  padding: 12px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #dc2626;
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: all 0.3s ease;
+}
+
+.clear-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-2px);
+}
+
+.clear-btn:active {
+  transform: scale(0.98);
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 992px) {
+  .reports-filter-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .reports-filter-container {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .clear-btn {
+    width: 100%;
+  }
+}
