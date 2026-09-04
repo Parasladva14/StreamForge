@@ -1,0 +1,175 @@
+/* ===========================
+   Reports Table Container
+=========================== */
+
+.reports-table-container {
+  background: #1f2937;
+  border-radius: 14px;
+  overflow-x: auto;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  margin-top: 20px;
+}
+
+/* Custom Scrollbar */
+
+.reports-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.reports-table-container::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 10px;
+}
+
+.reports-table-container::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+/* ===========================
+   Table
+=========================== */
+
+.reports-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #ffffff;
+  min-width: 900px;
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.reports-table thead th {
+  position: sticky;
+  top: 0;
+  background: #2563eb;
+  color: white;
+  padding: 16px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.25s ease;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.reports-table thead th:hover {
+  background: #1d4ed8;
+}
+
+/* ===========================
+   Body
+=========================== */
+
+.reports-table td {
+  padding: 15px;
+  border-bottom: 1px solid #374151;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.reports-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.reports-table tbody tr:hover {
+  background: #374151;
+}
+
+/* Zebra Rows */
+
+.reports-table tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+
+/* ===========================
+   Status Badge
+=========================== */
+
+.status-badge {
+  display: inline-block;
+  min-width: 110px;
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+.status-active {
+  background: #16a34a;
+}
+
+.status-inactive {
+  background: #dc2626;
+}
+
+.status-maintenance {
+  background: #f59e0b;
+}
+
+.status-default {
+  background: #6b7280;
+}
+
+/* ===========================
+   Temperature
+=========================== */
+
+.temp-normal {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.temp-medium {
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+.temp-high {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+/* ===========================
+   Empty State
+=========================== */
+
+.reports-empty {
+  margin-top: 25px;
+  padding: 50px;
+  text-align: center;
+  background: #1f2937;
+  color: #d1d5db;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 768px) {
+
+  .reports-table {
+    min-width: 700px;
+  }
+
+  .reports-table thead th,
+  .reports-table td {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .status-badge {
+    min-width: 90px;
+    font-size: 12px;
+  }
+
+}
