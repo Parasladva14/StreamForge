@@ -1,0 +1,1 @@
+from app.kafka.consumer import *
