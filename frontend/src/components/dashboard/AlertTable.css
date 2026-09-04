@@ -1,0 +1,44 @@
+.alert-card {
+    background: #1F2937;
+    color: white;
+    padding: 20px;
+    margin-top: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.2);
+}
+
+.alert-card h3 {
+    margin-bottom: 20px;
+}
+
+.alert-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.alert-table th {
+    background: #374151;
+    padding: 15px;
+    text-align: left;
+}
+
+.alert-table td {
+    padding: 15px;
+    border-bottom: 1px solid #374151;
+}
+
+.high-badge {
+    background: #F59E0B;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.critical-badge {
+    background: #EF4444;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+}
