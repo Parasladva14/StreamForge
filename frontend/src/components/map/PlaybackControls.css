@@ -1,0 +1,49 @@
+.playback-controls{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+padding:12px;
+
+background:white;
+
+border-radius:8px;
+
+box-shadow:0 2px 8px rgba(0,0,0,.2);
+
+margin-top:15px;
+
+}
+
+.playback-controls button{
+
+padding:8px 18px;
+
+border:none;
+
+background:#007bff;
+
+color:white;
+
+cursor:pointer;
+
+border-radius:5px;
+
+font-size:15px;
+
+}
+
+.playback-controls input{
+
+flex:1;
+
+}
+
+.playback-controls span{
+
+font-weight:bold;
+
+}
