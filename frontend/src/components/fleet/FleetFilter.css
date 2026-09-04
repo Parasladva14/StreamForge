@@ -1,0 +1,13 @@
+.fleet-filter{
+    margin-bottom:20px;
+}
+
+.fleet-filter select{
+    width:220px;
+    padding:12px;
+    border-radius:8px;
+    background:#1f2937;
+    color:white;
+    border:1px solid #374151;
+    outline:none;
+}
