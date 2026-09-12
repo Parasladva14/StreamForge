@@ -8,55 +8,27 @@ import "leaflet/dist/leaflet.css";
 import useTruckTracking from "../../hooks/useTruckTracking";
 
 import TruckMarker from "./TruckMarker";
+import MapController from "./MapController";
 
 import "./FleetMap.css";
 import RouteHistory from "./RouteHistory";
 import RoutePlayback from "./RoutePlayback";
 
 export default function FleetMap({
-
-    trucks,
-
-    selectedTruck,
-
-    setSelectedTruck,
-
-    route,
-
-    currentIndex
-
+  trucks,
+  selectedTruck,
+  setSelectedTruck,
+  route,
+  currentIndex,
+  onTruckUpdate,
 }) {
-
   // ==========================
   // Live Truck Tracking
   // ==========================
-
   useTruckTracking((updatedTruck) => {
-
-    setTrucks((previousTrucks) => {
-
-      const exists = previousTrucks.some(
-        (truck) => truck.id === updatedTruck.id
-      );
-
-      if (exists) {
-
-        return previousTrucks.map((truck) =>
-          truck.id === updatedTruck.id
-            ? {
-                ...truck,
-                ...updatedTruck,
-              }
-            : truck
-        );
-
-      }
-
-      // Add new truck if it doesn't exist
-      return [updatedTruck, ...previousTrucks];
-
-    });
-
+    if (onTruckUpdate) {
+      onTruckUpdate(updatedTruck);
+    }
   });
 
   return (
@@ -76,6 +48,8 @@ export default function FleetMap({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
+        <MapController selectedTruck={selectedTruck} />
+
         {trucks.map((truck) => (
           <TruckMarker
             key={truck.id}
@@ -83,21 +57,16 @@ export default function FleetMap({
             onSelect={setSelectedTruck}
           />
         ))}
-<RouteHistory
+        <RouteHistory
+          points={route}
+        />
 
-    points={route}
-
-/>
-
-<RoutePlayback
-
-    route={route}
-
-    currentIndex={currentIndex}
-
-/>
+        <RoutePlayback
+          route={route}
+          currentIndex={currentIndex}
+        />
       </MapContainer>
 
     </div>
   );
-}
+}
