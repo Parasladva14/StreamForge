@@ -85,15 +85,11 @@ export default function FleetMapPage() {
     }
 
     useRoutePlayback(
-
         playing,
-
         route,
-
         currentIndex,
-
-        setCurrentIndex
-
+        setCurrentIndex,
+        setPlaying
     );
 
     const filteredTrucks = trucks.filter((truck) => {
