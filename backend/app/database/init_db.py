@@ -1,3 +1,5 @@
+from sqlalchemy import text
+
 from app.database.base import Base
 from app.database.database import engine, SessionLocal
 from app.security.jwt import hash_password
@@ -10,8 +12,40 @@ from app.models.notification import Notification
 import app.models.dashboard
 
 
+def _migrate_trucks_table():
+    """
+    Add missing columns to the trucks table if they don't exist.
+    SQLAlchemy create_all only creates new tables, not new columns on existing tables.
+    This handles the case where the model was updated after the table was first created.
+    """
+    columns_to_add = [
+        ("latitude", "FLOAT DEFAULT 19.0760"),
+        ("longitude", "FLOAT DEFAULT 72.8777"),
+        ("speed", "FLOAT DEFAULT 55.0"),
+        ("fuel", "FLOAT DEFAULT 85.0"),
+        ("updated_at", "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),
+    ]
+    with engine.connect() as conn:
+        for col_name, col_def in columns_to_add:
+            try:
+                conn.execute(text(f"SELECT `{col_name}` FROM trucks LIMIT 1"))
+            except Exception:
+                try:
+                    conn.execute(text(f"ALTER TABLE trucks ADD COLUMN `{col_name}` {col_def}"))
+                    conn.commit()
+                    print(f"  [MIGRATE] Added column '{col_name}' to trucks table.")
+                except Exception as e:
+                    print(f"  [MIGRATE] Could not add column '{col_name}': {e}")
+
+
 def init_db():
     Base.metadata.create_all(bind=engine)
+
+    # Migrate existing trucks table to add any missing columns
+    try:
+        _migrate_trucks_table()
+    except Exception as e:
+        print(f"[WARN] Trucks table migration note: {e}")
 
     db = SessionLocal()
     try:
@@ -39,7 +73,7 @@ def init_db():
             ]
             db.add_all(default_users)
             db.commit()
-            print("👤 Default users seeded (admin@streamforge.com / admin123).")
+            print("[SEED] Default users seeded (admin@streamforge.com / admin123).")
 
         # 2. Seed Default Demo Trucks if none exist
         if db.query(Truck).count() == 0:
@@ -212,7 +246,7 @@ def init_db():
             ]
             db.add_all(default_trucks)
             db.commit()
-            print("🚚 Default demo fleet seeded (15 trucks) with coordinates.")
+            print("[SEED] Default demo fleet seeded (15 trucks) with coordinates.")
 
         # 3. Seed Default Geofences if none exist
         if db.query(Geofence).count() == 0:
@@ -247,7 +281,7 @@ def init_db():
             ]
             db.add_all(default_geofences)
             db.commit()
-            print("🌍 Default geofences seeded.")
+            print("[SEED] Default geofences seeded.")
 
         # 4. Seed Default Notifications if none exist
         if db.query(Notification).count() == 0:
@@ -276,10 +310,10 @@ def init_db():
             ]
             db.add_all(default_notifications)
             db.commit()
-            print("🔔 Default notifications seeded.")
+            print("[SEED] Default notifications seeded.")
 
     except Exception as e:
-        print(f"⚠️ Database seed note: {e}")
+        print(f"[WARN] Database seed note: {e}")
         db.rollback()
     finally:
         db.close()

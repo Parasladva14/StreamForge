@@ -27,17 +27,17 @@ async def lifespan(app: FastAPI):
     # Startup
     # ==========================
 
-    print("🚀 Starting StreamForge...")
+    print("[START] Starting StreamForge...")
 
     # Initialize database tables
     init_db()
 
-    print("✅ Database initialized successfully.")
+    print("[OK] Database initialized successfully.")
 
     # Start truck simulator
     start_simulator()
 
-    print("🚚 Truck Simulator started.")
+    print("[OK] Truck Simulator started.")
 
     yield
 
@@ -45,7 +45,7 @@ async def lifespan(app: FastAPI):
     # Shutdown
     # ==========================
 
-    print("🛑 Shutting down StreamForge...")
+    print("[STOP] Shutting down StreamForge...")
 
 
 # =========================================================
