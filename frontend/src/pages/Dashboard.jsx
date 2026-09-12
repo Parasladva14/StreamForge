@@ -41,7 +41,7 @@ export default function Dashboard() {
   };
 
   const handleAddTruck = () => {
-    navigate("/trucks/add");
+    navigate("/trucks");
   };
 
   const handleManageTrucks = () => {
