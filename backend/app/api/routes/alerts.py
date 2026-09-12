@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.database.database import get_db
+from app.dependencies.roles import require_role
 from app.schemas.alert import AlertCreate, AlertResponse
 from app.services.alert_service import (
     create_alert,
@@ -19,6 +20,7 @@ router = APIRouter(
 @router.get("/", response_model=list[AlertResponse])
 def read_alerts(
     db: Session = Depends(get_db),
+    current_user=Depends(require_role("Admin", "Operator", "Viewer")),
 ):
     """
     Get recent alerts.
@@ -29,6 +31,7 @@ def read_alerts(
 @router.get("/count")
 def alert_count(
     db: Session = Depends(get_db),
+    current_user=Depends(require_role("Admin", "Operator", "Viewer")),
 ):
     """
     Get alert statistics.
@@ -43,6 +46,7 @@ def alert_count(
 def add_alert(
     alert: AlertCreate,
     db: Session = Depends(get_db),
+    current_user=Depends(require_role("Admin", "Operator")),
 ):
     """
     Create a new alert.

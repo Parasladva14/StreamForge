@@ -1,18 +1,18 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children, allowedRoles }) {
+  const { isAuthenticated, role } = useAuth();
 
-    const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
-    if (!isAuthenticated) {
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
-        return <Navigate to="/" replace />;
-
-    }
-
-    return children;
-
+  return children;
 }
 
-export default ProtectedRoute;
+export default ProtectedRoute;

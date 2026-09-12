@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database.database import get_db
+from app.dependencies.roles import require_role
 
 from app.schemas.geofence import (
     GeofenceCreate,
@@ -36,6 +37,7 @@ router = APIRouter(
 )
 def list_geofences(
     db: Session = Depends(get_db),
+    current_user=Depends(require_role("Admin", "Operator", "Viewer")),
 ):
 
     return get_geofences(db)
@@ -52,6 +54,7 @@ def list_geofences(
 def read_geofence(
     geofence_id: int,
     db: Session = Depends(get_db),
+    current_user=Depends(require_role("Admin", "Operator", "Viewer")),
 ):
 
     geofence = get_geofence(
@@ -81,6 +84,7 @@ def read_geofence(
 def create_new_geofence(
     data: GeofenceCreate,
     db: Session = Depends(get_db),
+    current_user=Depends(require_role("Admin", "Operator")),
 ):
 
     return create_geofence(
@@ -101,6 +105,7 @@ def update_existing_geofence(
     geofence_id: int,
     data: GeofenceUpdate,
     db: Session = Depends(get_db),
+    current_user=Depends(require_role("Admin", "Operator")),
 ):
 
     geofence = update_geofence(
@@ -129,6 +134,7 @@ def update_existing_geofence(
 def delete_existing_geofence(
     geofence_id: int,
     db: Session = Depends(get_db),
+    current_user=Depends(require_role("Admin")),
 ):
 
     geofence = delete_geofence(
