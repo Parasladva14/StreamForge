@@ -7,6 +7,7 @@ from app.api.routes import (
     alerts,
     users,
     analytics,
+    notifications,
 )
 
 from app.api.routes.geofences import (
@@ -22,7 +23,7 @@ router = APIRouter()
 
 
 # =========================================================
-# EXISTING ROUTES
+# API ROUTES
 # =========================================================
 
 router.include_router(auth.router)
@@ -33,15 +34,10 @@ router.include_router(dashboard.router)
 
 router.include_router(alerts.router)
 
+router.include_router(notifications.router)
+
 router.include_router(users.router)
 
 router.include_router(analytics.router)
 
-
-# =========================================================
-# GEOFENCE ROUTES
-# =========================================================
-
-router.include_router(
-    geofence_router
-)
+router.include_router(geofence_router)
