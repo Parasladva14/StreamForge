@@ -1,9 +1,4 @@
-from kafka import KafkaConsumer
-import json
+from app.kafka.consumer import get_kafka_consumer
 
-consumer = KafkaConsumer(
-    "truck-temperature",
-    bootstrap_servers="localhost:9092",
-    auto_offset_reset="earliest",
-    value_deserializer=lambda x: json.loads(x.decode())
-)
+def get_stream_consumer():
+    return get_kafka_consumer(topic="truck-temperature", group_id="streamforge-analytics")

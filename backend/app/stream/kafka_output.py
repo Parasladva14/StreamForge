@@ -1,7 +1,4 @@
-from kafka import KafkaProducer
-import json
+from app.kafka.producer import send_temperature
 
-producer = KafkaProducer(
-    bootstrap_servers="localhost:9092",
-    value_serializer=lambda x: json.dumps(x).encode()
-)
+def emit_processed_event(event_data: dict) -> bool:
+    return send_temperature(event_data)
