@@ -6,27 +6,33 @@ router = APIRouter()
 
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    # Register the client
-    await manager.connect(websocket)
-    print("✅ WebSocket Client Connected")
-
+    await manager.connect(websocket, channel="all")
     try:
         while True:
-            # Receive message from client
             data = await websocket.receive_text()
-
-            print(f"📩 Received: {data}")
-
-            # Optional: Echo message back as JSON
             await websocket.send_json({
-                "event": "message",
-                "message": data
+                "event": "pong",
+                "message": data,
             })
-
-    except WebSocketDisconnect:
+    except (WebSocketDisconnect, Exception):
         manager.disconnect(websocket)
-        print("❌ WebSocket Client Disconnected")
 
-    except Exception as e:
+
+@router.websocket("/ws/notifications")
+async def notifications_websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, channel="notifications")
+    try:
+        while True:
+            await websocket.receive_text()
+    except (WebSocketDisconnect, Exception):
         manager.disconnect(websocket)
-        print(f"❌ WebSocket Error: {e}")
+
+
+@router.websocket("/ws/trucks")
+async def trucks_websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket, channel="trucks")
+    try:
+        while True:
+            await websocket.receive_text()
+    except (WebSocketDisconnect, Exception):
+        manager.disconnect(websocket)
