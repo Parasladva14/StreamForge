@@ -29,27 +29,40 @@ router = APIRouter(
 # ==========================================
 # Create Truck (Admin Only)
 # ==========================================
-@router.post("/", response_model=TruckResponse)
+@router.post("/", response_model=TruckResponse, status_code=201)
 async def create(
     data: TruckCreate,
     db: Session = Depends(get_db),
     current_user=Depends(require_role("Admin")),
 ):
-    truck = create_truck(db, data)
+    try:
+        truck = create_truck(db, data)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e),
+        )
 
     await manager.broadcast({
         "event": "truck_created",
         "truck": {
             "id": truck.id,
             "truck_id": truck.truck_id,
+            "truck_no": truck.truck_id,
             "driver_name": truck.driver_name,
+            "driver": truck.driver_name,
             "location": truck.location,
+            "latitude": truck.latitude,
+            "longitude": truck.longitude,
+            "speed": truck.speed,
+            "fuel": truck.fuel,
             "temperature": truck.temperature,
             "status": truck.status,
         },
     })
 
     return truck
+
 
 
 # ==========================================
@@ -132,8 +145,14 @@ async def update(
         "truck": {
             "id": truck.id,
             "truck_id": truck.truck_id,
+            "truck_no": truck.truck_id,
             "driver_name": truck.driver_name,
+            "driver": truck.driver_name,
             "location": truck.location,
+            "latitude": truck.latitude,
+            "longitude": truck.longitude,
+            "speed": truck.speed,
+            "fuel": truck.fuel,
             "temperature": truck.temperature,
             "status": truck.status,
         },
