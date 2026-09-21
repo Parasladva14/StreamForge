@@ -5,6 +5,7 @@ import {
 
 import "leaflet/dist/leaflet.css";
 
+import { useCallback } from "react";
 import useTruckTracking from "../../hooks/useTruckTracking";
 
 import TruckMarker from "./TruckMarker";
@@ -25,11 +26,13 @@ export default function FleetMap({
   // ==========================
   // Live Truck Tracking
   // ==========================
-  useTruckTracking((updatedTruck) => {
+  const handleTruckUpdate = useCallback((updatedTruck) => {
     if (onTruckUpdate) {
       onTruckUpdate(updatedTruck);
     }
-  });
+  }, [onTruckUpdate]);
+
+  useTruckTracking(handleTruckUpdate);
 
   return (
     <div className="fleet-map">
