@@ -12,7 +12,6 @@ from app.websocket.websocket import router as websocket_router
 
 from app.simulator.truck_simulator import start_simulator
 
-from app.api.routes import map
 from app.api.routes import route_history
 
 
@@ -84,15 +83,6 @@ app.include_router(router)
 # =========================================================
 
 app.include_router(websocket_router)
-
-
-# =========================================================
-# FLEET MAP ROUTES
-# =========================================================
-
-app.include_router(
-    map.router
-)
 
 
 # =========================================================

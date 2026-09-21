@@ -8,6 +8,7 @@ from app.api.routes import (
     users,
     analytics,
     notifications,
+    map,
 )
 
 from app.api.routes.geofences import (
@@ -29,6 +30,8 @@ router = APIRouter()
 router.include_router(auth.router)
 
 router.include_router(truck.router)
+
+router.include_router(map.router)
 
 router.include_router(dashboard.router)
 
