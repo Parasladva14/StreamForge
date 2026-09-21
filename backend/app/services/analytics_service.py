@@ -53,3 +53,49 @@ def get_dashboard_summary(db: Session):
         "average_temperature": round(float(average_temperature), 2),
         "critical_alerts": critical_alerts,
     }
+
+
+def get_temperature_trend(db: Session):
+    """
+    Return per-truck temperature data for trend charting.
+    """
+    trucks = db.query(Truck).order_by(Truck.id.asc()).all()
+    return [
+        {
+            "truck_id": t.truck_id,
+            "temperature": round(float(t.temperature), 1),
+            "location": t.location,
+            "status": t.status,
+        }
+        for t in trucks
+    ]
+
+
+def get_status_distribution(db: Session):
+    """
+    Return the count of trucks grouped by operational status.
+    """
+    rows = (
+        db.query(Truck.status, func.count(Truck.id))
+        .group_by(Truck.status)
+        .all()
+    )
+    return [
+        {"status": status, "count": count}
+        for status, count in rows
+    ]
+
+
+def get_location_distribution(db: Session):
+    """
+    Return the count of trucks grouped by location.
+    """
+    rows = (
+        db.query(Truck.location, func.count(Truck.id))
+        .group_by(Truck.location)
+        .all()
+    )
+    return [
+        {"location": location, "count": count}
+        for location, count in rows
+    ]
