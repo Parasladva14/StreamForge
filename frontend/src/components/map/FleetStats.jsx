@@ -3,23 +3,22 @@ import "./FleetStats.css";
 export default function FleetStats({ trucks = [] }) {
   const total = trucks.length;
 
+  // Use operational_status (from map.py) or status as fallback
+  const getStatus = (truck) =>
+    String(truck.operational_status || truck.status || "").toLowerCase();
+
   const active = trucks.filter(
-    (truck) =>
-      String(truck.status || "").toLowerCase() ===
-      "active"
+    (truck) => getStatus(truck) === "active"
   ).length;
 
   const inactive = trucks.filter(
-    (truck) =>
-      String(truck.status || "").toLowerCase() ===
-      "inactive"
+    (truck) => getStatus(truck) === "inactive"
   ).length;
 
   const maintenance = trucks.filter(
-    (truck) =>
-      String(truck.status || "").toLowerCase() ===
-      "maintenance"
+    (truck) => getStatus(truck) === "maintenance"
   ).length;
+
 
   const stats = [
     {

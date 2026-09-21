@@ -100,15 +100,18 @@ export default function FleetMapPage() {
 
             truck.driver.toLowerCase().includes(search.toLowerCase());
 
+        const operationalStatus = truck.operational_status || truck.status || "";
+
         const matchesFilter =
 
             filter === "All" ||
 
-            truck.status === filter;
+            operationalStatus === filter;
 
         return matchesSearch && matchesFilter;
 
     });
+
 
     if (loading) {
 
