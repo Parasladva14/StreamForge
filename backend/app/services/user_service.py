@@ -10,11 +10,15 @@ def get_all_users(db: Session):
 
 
 def create_user(db: Session, user: UserCreate):
+    # Validate role
+    allowed_roles = ["Admin", "Operator", "Viewer"]
+    role = user.role if user.role in allowed_roles else "Viewer"
+
     new_user = User(
         username=user.username,
         email=user.email,
         password=hash_password(user.password),
-        role=user.role,
+        role=role,
     )
 
     db.add(new_user)

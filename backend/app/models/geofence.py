@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime
-from datetime import datetime
+from sqlalchemy.sql import func
 
 from app.database.base import Base
 
@@ -51,6 +51,6 @@ class Geofence(Base):
     )
 
     created_at = Column(
-        DateTime,
-        default=datetime.utcnow
+        DateTime(timezone=True),
+        server_default=func.now()
     )
