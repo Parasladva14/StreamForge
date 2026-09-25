@@ -6,9 +6,9 @@ class NotificationWebSocket {
 
   connect(onMessage) {
 
-    // Change URL if backend runs elsewhere
+    const wsBase = import.meta.env.VITE_WS_URL || "ws://localhost:8000";
     this.socket = new WebSocket(
-      "ws://localhost:8000/ws/notifications"
+      `${wsBase}/ws/notifications`
     );
 
     this.socket.onopen = () => {

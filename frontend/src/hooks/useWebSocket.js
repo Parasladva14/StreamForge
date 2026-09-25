@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const WS_URL = "ws://127.0.0.1:8000/ws";
+const WS_URL = `${import.meta.env.VITE_WS_URL || "ws://localhost:8000"}/ws`;
 
 export default function useWebSocket(onMessage) {
   const socketRef = useRef(null);
