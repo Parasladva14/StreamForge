@@ -27,34 +27,6 @@ router = APIRouter(
 
 
 # ==========================================
-# Truck Locations (for Fleet Map)
-# ==========================================
-@router.get("/locations")
-def truck_locations(
-    db: Session = Depends(get_db),
-    current_user=Depends(
-        require_role("Admin", "Operator", "Viewer")
-    ),
-):
-    trucks = get_all_trucks(db)
-    return [
-        {
-            "id": t.id,
-            "truck_id": t.truck_id,
-            "driver_name": t.driver_name,
-            "location": t.location,
-            "latitude": t.latitude,
-            "longitude": t.longitude,
-            "speed": t.speed,
-            "fuel": t.fuel,
-            "temperature": t.temperature,
-            "status": t.status,
-        }
-        for t in trucks
-    ]
-
-
-# ==========================================
 # Create Truck (Admin Only)
 # ==========================================
 @router.post("/", response_model=TruckResponse, status_code=201)
