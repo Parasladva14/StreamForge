@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 import geofenceService from "../../services/geofenceService";
@@ -17,10 +17,31 @@ const initialForm = {
 
 export default function GeofenceForm({
   onSuccess,
+  editingGeofence,
+  onCancelEdit,
 }) {
   const [form, setForm] = useState(initialForm);
 
   const [saving, setSaving] = useState(false);
+
+  const isEditing = !!editingGeofence;
+
+  // Populate form when editing
+  useEffect(() => {
+    if (editingGeofence) {
+      setForm({
+        name: editingGeofence.name || "",
+        description: editingGeofence.description || "",
+        type: editingGeofence.type || "circle",
+        latitude: editingGeofence.latitude ?? "",
+        longitude: editingGeofence.longitude ?? "",
+        radius: editingGeofence.radius ?? "",
+        active: editingGeofence.active ?? true,
+      });
+    } else {
+      setForm(initialForm);
+    }
+  }, [editingGeofence]);
 
   const handleChange = (event) => {
     const { name, value, type, checked } =
@@ -35,12 +56,10 @@ export default function GeofenceForm({
     }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const validate = () => {
     if (!form.name.trim()) {
       toast.error("Geofence name is required.");
-      return;
+      return false;
     }
 
     if (
@@ -50,7 +69,7 @@ export default function GeofenceForm({
       toast.error(
         "Latitude and longitude are required."
       );
-      return;
+      return false;
     }
 
     if (
@@ -60,7 +79,7 @@ export default function GeofenceForm({
       toast.error(
         "Latitude must be between -90 and 90."
       );
-      return;
+      return false;
     }
 
     if (
@@ -70,7 +89,7 @@ export default function GeofenceForm({
       toast.error(
         "Longitude must be between -180 and 180."
       );
-      return;
+      return false;
     }
 
     if (
@@ -80,51 +99,64 @@ export default function GeofenceForm({
       toast.error(
         "Radius must be greater than 0."
       );
-      return;
+      return false;
     }
+
+    return true;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!validate()) return;
+
+    const payload = {
+      name: form.name.trim(),
+      description:
+        form.description.trim() || null,
+      type: form.type,
+      latitude: Number(form.latitude),
+      longitude: Number(form.longitude),
+      radius: Number(form.radius),
+      active: form.active,
+    };
 
     try {
       setSaving(true);
 
-      const payload = {
-        name: form.name.trim(),
-
-        description:
-          form.description.trim() || null,
-
-        type: form.type,
-
-        latitude: Number(form.latitude),
-
-        longitude: Number(form.longitude),
-
-        radius: Number(form.radius),
-
-        active: form.active,
-      };
-
-      await geofenceService.createGeofence(
-        payload
-      );
-
-      toast.success(
-        "Geofence created successfully."
-      );
+      if (isEditing) {
+        await geofenceService.updateGeofence(
+          editingGeofence.id,
+          payload
+        );
+        toast.success(
+          "Geofence updated successfully."
+        );
+      } else {
+        await geofenceService.createGeofence(
+          payload
+        );
+        toast.success(
+          "Geofence created successfully."
+        );
+      }
 
       setForm(initialForm);
+
+      if (onCancelEdit) onCancelEdit();
 
       if (onSuccess) {
         await onSuccess();
       }
     } catch (error) {
       console.error(
-        "Failed to create geofence:",
+        `Failed to ${isEditing ? "update" : "create"} geofence:`,
         error
       );
 
       const message =
         error?.response?.data?.detail ||
-        "Unable to create geofence.";
+        `Unable to ${isEditing ? "update" : "create"} geofence.`;
 
       toast.error(message);
     } finally {
@@ -134,17 +166,19 @@ export default function GeofenceForm({
 
   const handleReset = () => {
     setForm(initialForm);
+    if (onCancelEdit) onCancelEdit();
   };
 
   return (
     <div className="geofence-form-card">
       <div className="geofence-form-header">
         <div>
-          <h2>➕ Create Geofence</h2>
+          <h2>{isEditing ? "✏️ Edit Geofence" : "➕ Create Geofence"}</h2>
 
           <p>
-            Create a geographic monitoring zone
-            for your fleet.
+            {isEditing
+              ? `Editing "${editingGeofence.name}"`
+              : "Create a geographic monitoring zone for your fleet."}
           </p>
         </div>
       </div>
@@ -298,7 +332,7 @@ export default function GeofenceForm({
             onClick={handleReset}
             disabled={saving}
           >
-            Reset
+            {isEditing ? "Cancel" : "Reset"}
           </button>
 
           <button
@@ -307,8 +341,8 @@ export default function GeofenceForm({
             disabled={saving}
           >
             {saving
-              ? "Creating..."
-              : "Create Geofence"}
+              ? (isEditing ? "Updating..." : "Creating...")
+              : (isEditing ? "Update Geofence" : "Create Geofence")}
           </button>
         </div>
       </form>
