@@ -60,7 +60,20 @@ export default function Analytics() {
 
     useEffect(() => {
 
-        loadData();
+        Promise.all([
+            getTrucks(),
+            analyticsService.getDashboardSummary(),
+        ])
+            .then(([truckData, summaryData]) => {
+                setTrucks(truckData);
+                setSummary(summaryData);
+                setLastUpdated(new Date());
+            })
+            .catch((err) => {
+                console.error(err);
+                setError("Unable to load analytics data.");
+            })
+            .finally(() => setLoading(false));
 
         const timer = setInterval(loadData, 10000);
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { updateTruck } from "../../services/truckService";
 import { toast } from "react-toastify";
 
@@ -11,22 +11,24 @@ export default function EditTruckModal({
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-    driver_name: "",
-    location: "",
-    temperature: "",
-    status: "Active",
+    driver_name: truck?.driver_name || "",
+    location: truck?.location || "",
+    temperature: truck?.temperature || "",
+    status: truck?.status || "Active",
   });
 
-  useEffect(() => {
-    if (truck) {
-      setForm({
-        driver_name: truck.driver_name || "",
-        location: truck.location || "",
-        temperature: truck.temperature || "",
-        status: truck.status || "Active",
-      });
-    }
-  }, [truck]);
+  // Sync form with truck when truck changes (runs after initial render)
+  const truckId = truck?.id;
+  const [prevTruckId, setPrevTruckId] = useState(truckId);
+  if (truckId !== prevTruckId) {
+    setPrevTruckId(truckId);
+    setForm({
+      driver_name: truck?.driver_name || "",
+      location: truck?.location || "",
+      temperature: truck?.temperature || "",
+      status: truck?.status || "Active",
+    });
+  }
 
   if (!open) return null;
 

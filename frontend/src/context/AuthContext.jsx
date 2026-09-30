@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import { getUserRole, getUserEmail, isTokenValid } from "../utils/jwt";
 
 const AuthContext = createContext();
@@ -8,17 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(() => getUserRole());
   const [email, setEmail] = useState(() => getUserEmail());
 
-  useEffect(() => {
-    if (isTokenValid()) {
-      setToken(localStorage.getItem("access_token"));
-      setRole(getUserRole());
-      setEmail(getUserEmail());
-    } else {
-      setToken(null);
-      setRole(null);
-      setEmail(null);
-    }
-  }, []);
 
   const login = (jwtToken) => {
     localStorage.setItem("access_token", jwtToken);
@@ -50,4 +39,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

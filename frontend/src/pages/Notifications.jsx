@@ -38,8 +38,11 @@ export default function Notifications() {
   }, []);
 
   useEffect(() => {
-    loadNotifications();
-  }, [loadNotifications]);
+    notificationService.getNotifications()
+      .then((data) => setNotifications(data || []))
+      .catch((error) => console.error("Failed to load notifications:", error))
+      .finally(() => setLoading(false));
+  }, []);
 
   // ==========================
   // Real-Time Notifications

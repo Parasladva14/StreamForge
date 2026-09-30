@@ -1,17 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import {
   FaCog,
   FaThermometerHalf,
-  FaTachometerAlt,
-  FaGasPump,
   FaUserCircle,
   FaServer,
   FaSave,
   FaUndo,
   FaBroadcastTower,
-  FaDatabase,
   FaShieldAlt,
 } from "react-icons/fa";
 
@@ -25,6 +22,146 @@ const DEFAULT_SETTINGS = {
   autoRefreshDashboard: true,
   refreshIntervalSec: 10,
 };
+
+// Section Card wrapper
+const SectionCard = ({ icon, title, subtitle, children }) => (
+  <div
+    style={{
+      backgroundColor: "#1E293B",
+      borderRadius: "12px",
+      border: "1px solid #334155",
+      padding: "24px",
+      boxShadow: "0 4px 6px -1px rgba(0,0,0,0.2)",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+        marginBottom: "20px",
+        paddingBottom: "16px",
+        borderBottom: "1px solid #334155",
+      }}
+    >
+      <div
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: "8px",
+          background: "linear-gradient(135deg, #3B82F6, #6366F1)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "#FFFFFF",
+          fontSize: "16px",
+          flexShrink: 0,
+        }}
+      >
+        {icon}
+      </div>
+      <div>
+        <h3 style={{ color: "#F8FAFC", fontSize: "16px", fontWeight: "600", margin: 0 }}>{title}</h3>
+        {subtitle && (
+          <p style={{ color: "#94A3B8", fontSize: "12px", margin: "2px 0 0" }}>{subtitle}</p>
+        )}
+      </div>
+    </div>
+    {children}
+  </div>
+);
+
+// Labeled input
+const SettingRow = ({ label, description, children }) => (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "12px 0",
+      borderBottom: "1px solid rgba(51,65,85,0.5)",
+    }}
+  >
+    <div style={{ flex: 1 }}>
+      <div style={{ color: "#F8FAFC", fontSize: "14px", fontWeight: "500" }}>{label}</div>
+      {description && (
+        <div style={{ color: "#64748B", fontSize: "12px", marginTop: "2px" }}>{description}</div>
+      )}
+    </div>
+    <div style={{ flexShrink: 0, marginLeft: "16px" }}>{children}</div>
+  </div>
+);
+
+// Toggle switch
+const Toggle = ({ checked, onChange }) => (
+  <div
+    onClick={() => onChange(!checked)}
+    style={{
+      width: 44,
+      height: 24,
+      borderRadius: 12,
+      backgroundColor: checked ? "#3B82F6" : "#475569",
+      cursor: "pointer",
+      position: "relative",
+      transition: "background-color 0.2s ease",
+    }}
+  >
+    <div
+      style={{
+        width: 18,
+        height: 18,
+        borderRadius: "50%",
+        backgroundColor: "#FFFFFF",
+        position: "absolute",
+        top: 3,
+        left: checked ? 23 : 3,
+        transition: "left 0.2s ease",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+      }}
+    />
+  </div>
+);
+
+// Number input
+const NumberInput = ({ value, onChange, min, max, step = 1, unit = "" }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <input
+      type="number"
+      value={value}
+      onChange={(e) => onChange(Number(e.target.value))}
+      min={min}
+      max={max}
+      step={step}
+      style={{
+        width: "80px",
+        padding: "6px 10px",
+        backgroundColor: "#0F172A",
+        color: "#F8FAFC",
+        border: "1px solid #334155",
+        borderRadius: "6px",
+        fontSize: "14px",
+        textAlign: "center",
+      }}
+    />
+    {unit && <span style={{ color: "#64748B", fontSize: "12px" }}>{unit}</span>}
+  </div>
+);
+
+// Status dot
+const StatusDot = ({ color = "#22C55E", label }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div
+      style={{
+        width: 8,
+        height: 8,
+        borderRadius: "50%",
+        backgroundColor: color,
+        boxShadow: `0 0 6px ${color}`,
+      }}
+    />
+    <span style={{ color: "#94A3B8", fontSize: "13px" }}>{label}</span>
+  </div>
+);
 
 function Settings() {
   const { role, email } = useAuth();
@@ -78,145 +215,6 @@ function Settings() {
     );
   };
 
-  // Section Card wrapper
-  const SectionCard = ({ icon, title, subtitle, children }) => (
-    <div
-      style={{
-        backgroundColor: "#1E293B",
-        borderRadius: "12px",
-        border: "1px solid #334155",
-        padding: "24px",
-        boxShadow: "0 4px 6px -1px rgba(0,0,0,0.2)",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "12px",
-          marginBottom: "20px",
-          paddingBottom: "16px",
-          borderBottom: "1px solid #334155",
-        }}
-      >
-        <div
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: "8px",
-            background: "linear-gradient(135deg, #3B82F6, #6366F1)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#FFFFFF",
-            fontSize: "16px",
-            flexShrink: 0,
-          }}
-        >
-          {icon}
-        </div>
-        <div>
-          <h3 style={{ color: "#F8FAFC", fontSize: "16px", fontWeight: "600", margin: 0 }}>{title}</h3>
-          {subtitle && (
-            <p style={{ color: "#94A3B8", fontSize: "12px", margin: "2px 0 0" }}>{subtitle}</p>
-          )}
-        </div>
-      </div>
-      {children}
-    </div>
-  );
-
-  // Labeled input
-  const SettingRow = ({ label, description, children }) => (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "12px 0",
-        borderBottom: "1px solid rgba(51,65,85,0.5)",
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        <div style={{ color: "#F8FAFC", fontSize: "14px", fontWeight: "500" }}>{label}</div>
-        {description && (
-          <div style={{ color: "#64748B", fontSize: "12px", marginTop: "2px" }}>{description}</div>
-        )}
-      </div>
-      <div style={{ flexShrink: 0, marginLeft: "16px" }}>{children}</div>
-    </div>
-  );
-
-  // Toggle switch
-  const Toggle = ({ checked, onChange }) => (
-    <div
-      onClick={() => onChange(!checked)}
-      style={{
-        width: 44,
-        height: 24,
-        borderRadius: 12,
-        backgroundColor: checked ? "#3B82F6" : "#475569",
-        cursor: "pointer",
-        position: "relative",
-        transition: "background-color 0.2s ease",
-      }}
-    >
-      <div
-        style={{
-          width: 18,
-          height: 18,
-          borderRadius: "50%",
-          backgroundColor: "#FFFFFF",
-          position: "absolute",
-          top: 3,
-          left: checked ? 23 : 3,
-          transition: "left 0.2s ease",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
-        }}
-      />
-    </div>
-  );
-
-  // Number input
-  const NumberInput = ({ value, onChange, min, max, step = 1, unit = "" }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <input
-        type="number"
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        min={min}
-        max={max}
-        step={step}
-        style={{
-          width: "80px",
-          padding: "6px 10px",
-          backgroundColor: "#0F172A",
-          color: "#F8FAFC",
-          border: "1px solid #334155",
-          borderRadius: "6px",
-          fontSize: "14px",
-          textAlign: "center",
-        }}
-      />
-      {unit && <span style={{ color: "#64748B", fontSize: "12px" }}>{unit}</span>}
-    </div>
-  );
-
-  // Status dot
-  const StatusDot = ({ color = "#22C55E", label }) => (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <div
-        style={{
-          width: 8,
-          height: 8,
-          borderRadius: "50%",
-          backgroundColor: color,
-          boxShadow: `0 0 6px ${color}`,
-        }}
-      />
-      <span style={{ color: "#94A3B8", fontSize: "13px" }}>{label}</span>
-    </div>
-  );
 
   return (
     <div style={{ padding: "28px 32px", maxWidth: "960px" }}>

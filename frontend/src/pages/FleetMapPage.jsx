@@ -33,34 +33,12 @@ export default function FleetMapPage() {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
-
-        loadTruckLocations();
-
+        mapService.getTruckLocations()
+            .then((data) => setTrucks(data))
+            .catch((error) => console.error(error))
+            .finally(() => setLoading(false));
     }, []);
 
-    async function loadTruckLocations() {
-
-        try {
-
-            const data = await mapService.getTruckLocations();
-
-            setTrucks(data);
-
-        }
-
-        catch (error) {
-
-            console.error(error);
-
-        }
-
-        finally {
-
-            setLoading(false);
-
-        }
-
-    }
 
     async function handleTruckSelect(truck) {
 

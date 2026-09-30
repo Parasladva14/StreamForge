@@ -40,7 +40,10 @@ export default function Trucks() {
   };
 
   useEffect(() => {
-    loadTrucks();
+    getTrucks()
+      .then((data) => setTrucks(data))
+      .catch((e) => console.error(e))
+      .finally(() => setLoading(false));
   }, []);
 
   useWebSocket((message) => {
@@ -58,7 +61,7 @@ export default function Trucks() {
 
     try {
       await deleteTruck(id);
-    } catch (err) {
+    } catch {
       alert("Unable to delete truck.");
     }
   };

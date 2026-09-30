@@ -32,7 +32,9 @@ export default function AdminPanel() {
 
     useEffect(() => {
 
-        loadUsers();
+        getUsers()
+            .then((data) => setUsers(data))
+            .catch(() => toast.error("Failed to load users"));
 
     }, []);
 

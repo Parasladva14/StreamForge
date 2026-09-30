@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 import geofenceService from "../../services/geofenceService";
@@ -26,8 +26,11 @@ export default function GeofenceForm({
 
   const isEditing = !!editingGeofence;
 
-  // Populate form when editing
-  useEffect(() => {
+  // Sync form with editingGeofence when it changes (derived state pattern)
+  const editId = editingGeofence?.id ?? null;
+  const [prevEditId, setPrevEditId] = useState(editId);
+  if (editId !== prevEditId) {
+    setPrevEditId(editId);
     if (editingGeofence) {
       setForm({
         name: editingGeofence.name || "",
@@ -41,7 +44,7 @@ export default function GeofenceForm({
     } else {
       setForm(initialForm);
     }
-  }, [editingGeofence]);
+  }
 
   const handleChange = (event) => {
     const { name, value, type, checked } =

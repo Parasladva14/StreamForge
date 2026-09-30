@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { addTruck, updateTruck } from "../../services/truckService";
 import { toast } from "react-toastify";
 
@@ -10,24 +10,26 @@ export default function TruckForm({
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-    truck_id: "",
-    driver_name: "",
-    location: "",
-    temperature: "",
-    status: "Active",
+    truck_id: initialData?.truck_id || "",
+    driver_name: initialData?.driver_name || "",
+    location: initialData?.location || "",
+    temperature: initialData?.temperature || "",
+    status: initialData?.status || "Active",
   });
 
-  useEffect(() => {
-    if (initialData) {
-      setForm({
-        truck_id: initialData.truck_id || "",
-        driver_name: initialData.driver_name || "",
-        location: initialData.location || "",
-        temperature: initialData.temperature || "",
-        status: initialData.status || "Active",
-      });
-    }
-  }, [initialData]);
+  // Sync form with initialData when it changes
+  const dataId = initialData?.truck_id;
+  const [prevDataId, setPrevDataId] = useState(dataId);
+  if (dataId !== prevDataId) {
+    setPrevDataId(dataId);
+    setForm({
+      truck_id: initialData?.truck_id || "",
+      driver_name: initialData?.driver_name || "",
+      location: initialData?.location || "",
+      temperature: initialData?.temperature || "",
+      status: initialData?.status || "Active",
+    });
+  }
 
   const handleChange = (e) => {
     setForm((prev) => ({

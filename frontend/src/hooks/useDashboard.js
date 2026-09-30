@@ -71,7 +71,18 @@ export default function useDashboard() {
   };
 
   useEffect(() => {
-    loadDashboard();
+    Promise.all([
+      getDashboardStats(),
+      getRecentTrucks(),
+      getAlerts(),
+    ])
+      .then(([statsData, trucksData, alertsData]) => {
+        setStats(statsData || {});
+        setTrucks(trucksData || []);
+        setAlerts(alertsData || []);
+      })
+      .catch((err) => console.error("Dashboard Error:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   return {

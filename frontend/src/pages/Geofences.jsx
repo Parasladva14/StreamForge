@@ -45,8 +45,14 @@ export default function Geofences() {
   }, []);
 
   useEffect(() => {
-    loadGeofences();
-  }, [loadGeofences]);
+    geofenceService.getGeofences()
+      .then((data) => setGeofences(data || []))
+      .catch((err) => {
+        console.error("Failed to load geofences:", err);
+        setError("Unable to load geofences.");
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleEdit = (geofence) => {
     setEditingGeofence(geofence);

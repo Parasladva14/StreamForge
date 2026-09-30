@@ -8,7 +8,10 @@ export default function useWebSocket(onMessage) {
   const reconnectTimerRef = useRef(null);
   const shouldReconnectRef = useRef(true);
 
-  callbackRef.current = onMessage;
+  // Update callback ref in an effect instead of during render
+  useEffect(() => {
+    callbackRef.current = onMessage;
+  });
 
   useEffect(() => {
     const connect = () => {
@@ -31,13 +34,13 @@ export default function useWebSocket(onMessage) {
           if (callbackRef.current) {
             callbackRef.current(data);
           }
-        } catch (err) {
-          console.error("❌ Invalid WebSocket message:", err);
+        } catch (e) {
+          console.error("❌ Invalid WebSocket message:", e);
         }
       };
 
-      socket.onerror = (err) => {
-        console.error("❌ WebSocket Error:", err);
+      socket.onerror = (e) => {
+        console.error("❌ WebSocket Error:", e);
       };
 
       socket.onclose = (event) => {

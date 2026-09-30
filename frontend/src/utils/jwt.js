@@ -12,7 +12,7 @@ export const getDecodedToken = () => {
       return null;
     }
     return decoded;
-  } catch (error) {
+  } catch {
     localStorage.removeItem("access_token");
     return null;
   }

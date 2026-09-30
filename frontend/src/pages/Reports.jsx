@@ -30,35 +30,19 @@ export default function Reports() {
   const rowsPerPage = 10;
 
   useEffect(() => {
-    loadData();
+    getTrucks()
+      .then((data) => setTrucks(data || []))
+      .catch((error) => console.error("Failed to load trucks:", error))
+      .finally(() => setLoading(false));
   }, []);
 
-  async function loadData() {
-    try {
-      setLoading(true);
-
-      const data = await getTrucks();
-
-      setTrucks(data || []);
-    } catch (error) {
-      console.error("Failed to load trucks:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // Reset pagination whenever filters change
-  useEffect(() => {
+  // Reset pagination whenever filters change — using derived state pattern
+  const filterKey = `${search}|${status}|${location}|${fromDate}|${toDate}|${sortField}|${sortOrder}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey);
     setCurrentPage(1);
-  }, [
-    search,
-    status,
-    location,
-    fromDate,
-    toDate,
-    sortField,
-    sortOrder,
-  ]);
+  }
 
   // Location Dropdown
   const locations = useMemo(() => {

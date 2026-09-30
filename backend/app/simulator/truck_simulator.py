@@ -75,7 +75,7 @@ async def simulate():
                             "truck_id": notif.truck_id,
                             "created_at": notif.created_at.isoformat() if notif.created_at else None,
                         },
-                    })
+                    }, channel="notifications")
 
             # 3. Temperature simulation
             temp_change = random.randint(-2, 3)
@@ -121,7 +121,7 @@ async def simulate():
                         "truck_id": notif.truck_id,
                         "created_at": notif.created_at.isoformat() if notif.created_at else None,
                     },
-                })
+                }, channel="notifications")
 
             updated_trucks.append(truck)
 
@@ -162,9 +162,7 @@ async def simulate():
             await manager.broadcast({
                 "event": "truck_updated",
                 "truck": truck_payload,
-            })
-            # Also broadcast directly to trucks channel
-            await manager.broadcast(truck_payload, channel="trucks")
+            }, channel="trucks")
 
     except Exception as e:
         logger.error(f"Error in truck simulation tick: {e}", exc_info=True)

@@ -26,11 +26,16 @@ class ConnectionManager:
 
     async def broadcast(self, message: dict, channel: str = "all"):
         """
-        Broadcast JSON message to subscribers of given channel and 'all'.
+        Broadcast JSON message to subscribers of the given channel only.
+        When channel is 'all', broadcasts to all active connections.
+        When channel is specific (e.g. 'trucks', 'notifications'), only those subscribers receive it.
         """
-        targets: Set[WebSocket] = set(self.active_connections)
-        if channel != "all" and channel in self.channel_subscribers:
-            targets = self.channel_subscribers[channel] | self.channel_subscribers.get("all", set())
+        if channel == "all":
+            targets = set(self.active_connections)
+        elif channel in self.channel_subscribers:
+            targets = set(self.channel_subscribers[channel])
+        else:
+            targets = set()
 
         disconnected = []
         for connection in list(targets):
