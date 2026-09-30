@@ -44,3 +44,7 @@ Thumbs.db
 # Database
 *.sqlite
 *.sqlite3
+
+# Stream processing state
+backend/data/
+data/stream_state/

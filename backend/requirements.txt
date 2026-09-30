@@ -9,6 +9,7 @@ bytewax==0.21.1
 cffi==2.1.1
 click==8.4.2
 colorama==0.4.6
+confluent-kafka>=2.0.0
 cryptography==50.0.1
 ecdsa==0.19.2
 email-validator>=2.0.0
